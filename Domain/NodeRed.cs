@@ -26,9 +26,9 @@ namespace BlazorApp2.Domain
             return Task.CompletedTask;
         }
 
-        public Task CreateContainer(IDockerClient client)
+        public async Task CreateContainer(IDockerClient client)
         {
-            Id = client.Containers.CreateContainerAsync(new CreateContainerParameters()
+            var response = await client.Containers.CreateContainerAsync(new CreateContainerParameters()
             {
                 Image = "nodered/node-red",
                 ExposedPorts = new Dictionary<string, EmptyStruct>
@@ -52,8 +52,8 @@ namespace BlazorApp2.Domain
                     },
                     ExtraHosts = new[] { "localhost:127.0.0.1" },
                 }
-            }).Id.ToString();
-            return Task.CompletedTask;
+            });
+            Id = response.ID;
         }
 
        public async Task Start(IDockerClient client) 
