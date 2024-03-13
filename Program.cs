@@ -1,4 +1,5 @@
 using BlazorApp2.Components;
+using BlazorApp2.Domain;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
@@ -71,7 +72,10 @@ app.MapRazorComponents<App>()
 ////        Console.WriteLine(message.Status);
 ////    }
 ////));
-await M2();
+
+
+
+/*await M2();
 static async Task M2()
 {
     DockerClient client = new DockerClientConfiguration().CreateClient();
@@ -95,7 +99,9 @@ static async Task M2()
              Console.WriteLine(message.Status);
          }
      ));
+
     var portToExpose = 1880;
+
     var a = await client.Containers.CreateContainerAsync(new CreateContainerParameters()
     {
         Image = "nodered/node-red",
@@ -123,7 +129,12 @@ static async Task M2()
     });
 
     await client.Containers.StartContainerAsync(a.ID, new ContainerStartParameters());
-}
+Console.WriteLine(client);  
+}*/
+
+// start sequence
+Stand stand = new Stand ();
+stand.CreateImages();
+stand.RunNodeRed();
+
 app.Run();
-
-
