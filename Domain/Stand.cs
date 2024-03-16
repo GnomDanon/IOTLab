@@ -25,11 +25,16 @@ namespace BlazorApp2.Domain
             return Run(nodeRed);
         }
 
-        public Task Run(IDockerService app)
+        public async Task Run(IDockerService app)
         {
-            app.CreateContainer(client);
-            app.Start(client);
-            return Task.CompletedTask; // FIXME
+            await app.CreateContainer(client);
+            await app.Start(client);
+        }
+
+        public async Task StopNodeRed()
+        {
+            await nodeRed.Stop(client);
+            await nodeRed.Delete(client);
         }
 
 

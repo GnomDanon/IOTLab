@@ -75,7 +75,7 @@ app.MapRazorComponents<App>()
 
 
 
-await M2();
+/*await M2();
 static async Task M2()
 {
     DockerClient client = new DockerClientConfiguration().CreateClient();
@@ -130,11 +130,13 @@ static async Task M2()
 
     await client.Containers.StartContainerAsync(a.ID, new ContainerStartParameters());
 Console.WriteLine(client);  
-}
+}*/
 
 // start sequence
-/*Stand stand = new Stand ();
+Stand stand = new Stand();
 stand.CreateImages();
-stand.RunNodeRed();*/
+await stand.RunNodeRed();
+Thread.Sleep(10000);
+await stand.StopNodeRed();
 
 app.Run();

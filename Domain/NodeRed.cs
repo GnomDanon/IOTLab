@@ -8,7 +8,7 @@ namespace BlazorApp2.Domain
         string name = "nodered/node-red";
         public string Name { get { return name; } }
         int port = 1880;
-        public int Port { get { return port; } }
+        public int Port { get { return port; } set { port = value; } }
         string Id = "";
         ImagesCreateParameters imageParams = new ImagesCreateParameters
         {
@@ -17,13 +17,12 @@ namespace BlazorApp2.Domain
         };
 
 
-        public Task CreateImage(IDockerClient client)
+        public async Task CreateImage(IDockerClient client)
         {
-            client.Images.CreateImageAsync(imageParams, null, new Progress<JSONMessage>(message =>
+            await client.Images.CreateImageAsync(imageParams, null, new Progress<JSONMessage>(message =>
             {
                 Console.WriteLine(message.Status);
             }));
-            return Task.CompletedTask;
         }
 
         public async Task CreateContainer(IDockerClient client)
@@ -57,25 +56,29 @@ namespace BlazorApp2.Domain
         }
 
        public async Task Start(IDockerClient client) 
-        { 
+        {
+            var a = client.Containers.ListContainersAsync(new ContainersListParameters());
             await client.Containers.StartContainerAsync(Id, new ContainerStartParameters());
-            //return Task.CompletedTask;
+            Console.WriteLine(a);
         }
 
-        public Task Stop(IDockerClient client)
+        public async Task Stop(IDockerClient client)
         {
-            client.Containers.StopContainerAsync(Id, new ContainerStopParameters
+            await client.Containers.StopContainerAsync(Id, new ContainerStopParameters
             {
                 WaitBeforeKillSeconds = 30
             },
             CancellationToken.None);
-            return Task.CompletedTask;
         }
 
-        public Task Delete(IDockerClient client)
+        public async Task Kill(IDockerClient client)
         {
-            client.Containers.KillContainerAsync(Id, new ContainerKillParameters());
-            return Task.CompletedTask;
+           await client.Containers.KillContainerAsync(Id, new ContainerKillParameters());
+        }
+
+        public async Task Delete (IDockerClient client)
+        {
+            await client.Containers.RemoveContainerAsync(Id, new ContainerRemoveParameters() {Force=true });
         }
     }
 }
