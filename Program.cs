@@ -135,8 +135,6 @@ Console.WriteLine(client);
 // start sequence
 Stand stand = new Stand();
 stand.CreateImages();
-await stand.RunNodeRed();
-Thread.Sleep(10000);
-await stand.StopNodeRed();
+await stand.Run(stand.openHab);
 
 app.Run();

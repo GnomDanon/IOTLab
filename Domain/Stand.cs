@@ -6,17 +6,22 @@ namespace BlazorApp2.Domain
     {
         DockerClient client;
         public NodeRed nodeRed;
+        public Mosquitto mqtt;
+        public OpenHab openHab;
 
         public Stand()
         {
             client = new DockerClientConfiguration().CreateClient();
             nodeRed = new NodeRed();
+            mqtt = new Mosquitto();
+            openHab = new OpenHab();
         }
         
         public Task CreateImages()
         {
             nodeRed.CreateImage(client);
-            // ToDo create other images
+            mqtt.CreateImage(client);
+            openHab.CreateImage(client);
             return Task.CompletedTask;
         }
 
@@ -25,7 +30,7 @@ namespace BlazorApp2.Domain
             return Run(nodeRed);
         }
 
-        public async Task Run(IDockerService app)
+        public async Task Run(DockerService app)
         {
             await app.CreateContainer(client);
             await app.Start(client);
